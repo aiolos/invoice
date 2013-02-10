@@ -1,0 +1,36 @@
+<?php
+// module/Album/view/album/album/index.phtml:
+
+$title = 'Eigenaren';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('owner', array('controller'=>'owner','action'=>'add'));?>">Nieuwe eigenaar</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Naam</th>
+    <th>Adres</th>
+    <th>Postcode</th>
+    <th>Plaats</th>
+    <th>Land</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($owners as $owner) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($owner->getName());?></td>
+    <td><?php echo $this->escapeHtml($owner->getStreet() . ' ' . $owner->getHousenumber());?></td>
+    <td><?php echo $this->escapeHtml($owner->getPostalcode());?></td>
+    <td><?php echo $this->escapeHtml($owner->getCity());?></td>
+    <td><?php echo $this->escapeHtml($owner->getCountry());?></td>
+    <td>
+        <a href="<?php echo $this->url('owner',
+            array('action'=>'edit', 'id' => $owner->getId()));?>">Edit</a>
+        <a href="<?php echo $this->url('owner',
+            array('action'=>'delete', 'id' => $owner->getId()));?>">Delete</a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>
