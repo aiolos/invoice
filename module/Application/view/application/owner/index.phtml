@@ -27,9 +27,9 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($owner->getCountry());?></td>
     <td>
         <a href="<?php echo $this->url('owner',
-            array('action'=>'edit', 'id' => $owner->getId()));?>">Edit</a>
+            array('action'=>'edit', 'id' => $owner->getId()));?>"><i class="icon-edit"></i></a>
         <a href="<?php echo $this->url('owner',
-            array('action'=>'delete', 'id' => $owner->getId()));?>">Delete</a>
+            array('action'=>'delete', 'id' => $owner->getId()));?>"><i class="icon-remove"></i></a>
     </td>
 </tr>
 <?php endforeach; ?>

@@ -53,7 +53,7 @@ class OwnerTable
         }
     }
 
-    public function deleteAlbum($id)
+    public function deleteOwner($id)
     {
         $this->tableGateway->delete(array('id' => $id));
     }

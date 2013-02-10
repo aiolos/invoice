@@ -80,6 +80,32 @@ class OwnerController extends AbstractActionController
         );
     }
     
+    public function deleteAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('owner');
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $del = $request->getPost('del', 'No');
+
+            if ($del == 'Yes') {
+                $id = (int) $request->getPost('id');
+                $this->getAlbumTable()->deleteOwner($id);
+            }
+
+            // Redirect to list of albums
+            return $this->redirect()->toRoute('owner');
+        }
+
+        return array(
+            'id'    => $id,
+            'owner' => $this->getOwnerTable()->getOwner($id)
+        );
+    }
+    
     public function getOwnerTable()
     {
         if (!$this->ownerTable) {
