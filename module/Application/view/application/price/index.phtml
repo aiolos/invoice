@@ -1,0 +1,48 @@
+<?php
+
+$title = 'Objecttypes';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?php echo $this->url('objecttype', array('controller'=>'objecttype','action'=>'add'));?>"><i class="icon-plus"></i>Nieuw objecttype</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>ID</th>
+    <th>Naam</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($objecttypes as $objecttype) : ?>
+<tr>
+    <td><?php echo $objecttype->getId();?></td>
+    <td><?php echo $this->escapeHtml($objecttype->getName());?></td>
+    <td>
+        <a href="<?php echo $this->url('objecttype',
+            array('action'=>'edit', 'id' => $objecttype->getId()));?>"><i class="icon-edit"></i></a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>
+
+<table class="table">
+<tr>
+    <th>ID</th>
+    <th>Jaar</th>
+    <th>Prijs</th>
+    <th>Eenheid</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($prices as $price) : ?>
+<tr>
+    <td><?php echo $price->getId();?></td>
+    <td><?php echo $this->escapeHtml($price->getYear());?></td>
+    <td><?php echo $this->escapeHtml($price->getPrice());?></td>
+    <td><?php echo $this->escapeHtml($price->getUnit());?></td>
+    <td>
+
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>

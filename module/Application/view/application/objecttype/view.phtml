@@ -1,0 +1,54 @@
+<?php
+$title = 'Bekijk Objecttype';
+$this->headTitle($title);
+?>
+<a class="btn btn-default" href="/objecttype">
+    <span class="glyphicon glyphicon-arrow-left"></span>
+    Terug naar lijst
+</a>
+<h1><span class="glyphicon glyphicon-tags"></span> <?php echo $this->escapeHtml($title) . ' - ' . $objecttype->getName(); ?></h1>
+<table class="table">
+<?php
+echo '<tr><th>ID</th><th>Naam</th><th>Prijs</th><th>Actie</th></tr>';
+echo '<tr><td>';
+echo $this->escapeHtml($objecttype->getId()) . '<br>';
+echo '</td><td>';
+echo $this->escapeHtml($objecttype->getName()) . '<br>';
+echo '</td><td>';
+if (is_object($objecttype->getCurrentPrice())) {
+    echo '&euro; ' . preg_replace('/\./', ',', $objecttype->getCurrentPrice()->getPrice()) . ' / ' . $objecttype->getCurrentPrice()->getUnit();
+} else {
+    echo 'Geen prijs bekend';
+    $europrice = $price->setPrice(preg_replace('/\./', ',', $price->getPrice()));
+}
+echo '</td>';
+?>
+    <td>
+    <a class="btn btn-info btn-xs" href="/objecttype/edit/<?php echo $objecttype->getId(); ?>"><span class="glyphicon glyphicon-edit"></span> Wijzig</a>
+    </td>
+    <?php
+echo '</tr>';
+?>
+</table>
+<h3><span class="glyphicon glyphicon-euro"></span> Historische prijzen:</h3>
+<table class="table">
+<?php
+echo '<tr><th>Jaar</th><th>Prijs</th><th>Eenheid</th><th>Actie</th></tr>';
+foreach ($objecttype->getPrices() as $price) {
+    echo '<tr><td>';
+    echo $this->escapeHtml($price->getYear()) . '<br>';
+    echo '</td><td>';
+    echo $this->escapeHtml(preg_replace('/\./', ',', $price->getPrice())) . '<br>';
+    echo '</td><td>';
+    echo $this->escapeHtml($price->getUnit()) . '<br>';
+    echo '</td>';
+    echo '<td>';
+    ?>
+    <a class="btn btn-info btn-xs" href="/price/edit/<?php echo $objecttype->getId() . '/' . $price->getYear(); ?>"><span class="glyphicon glyphicon-edit"></span> Wijzig</a>
+    <?php
+    echo '</td>';
+    echo '</tr>';
+}
+?>
+</table>
+<a class="btn btn-success btn-xs" href="/price/add/<?php echo $objecttype->getId(); ?>"><span class="glyphicon glyphicon-plus"></span> Prijs toevoegen</a>

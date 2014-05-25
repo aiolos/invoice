@@ -1,0 +1,157 @@
+<?php
+$title = 'Bekijk ' . $ownership->getName();
+$this->headTitle($title);
+?>
+<a class="btn btn-default" href="/owner/view/<?php echo $ownership->getOwner()->getId(); ?>">
+    <span class="glyphicon glyphicon-arrow-left"></span>
+    Terug naar <?php echo $ownership->getOwner()->getInitials() . ' ' .$ownership->getOwner()->getName(); ?>
+</a>
+<h1><i class="glyphicon glyphicon-stats"></i> <?php echo $this->escapeHtml($title); ?></h1>
+<h4>Eigenaar: <?php echo $ownership->getOwner()->getInitials() . ' ' . $ownership->getOwner()->getName(); ?></h4>
+<br>
+<div class=row">
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-xs-6">
+                <table class="table">
+                    <tr><th colspan="3">
+                        <i class="glyphicon glyphicon-stats"></i> Stroomverbruik metingen
+                        <div class="pull-right"><a class="btn btn-xs btn-success" id="newMeasurement" title="Nieuwe meting" href="/power/add/<?php echo $ownership->getId(); ?>" title='Toevoegen nieuwe meting'>
+                            <span class="glyphicon glyphicon-dashboard"></span> Toevoegen nieuwe meting
+                        </a></div>
+                    </th></tr>
+                    <tr><th>Opnamedatum</th><th>Stand</th><th>Verbruik</th><th>Actie</th>
+                    <?php
+                    $values = array();
+                    $measurements = array();
+                    $measureDates = array();
+                    foreach ($powerobjects as $object) {
+                        $measurements[$object->getDate()->format('Y')] = $object->getValue();
+                        $values[$object->getDate()->format('Y')] = '[' . $object->getDate()->format('Y') . ', ' . $object->getValue() . ']';
+                        $measureDates[$object->getDate()->format('Y')] = $object->getDate()->format('d-m-Y');
+                    }
+                    if (!count($values)) {
+                        echo '<tr><td colspan=3>Geen metingen beschikbaar</td></tr>';
+                    }
+
+                    ksort($values);
+                    ksort($measurements);
+                    $yearUsage = array();
+                    $yearUsages = array();
+                    foreach ($measurements as $index => $value) {
+                        if (key_exists($index - 1, $values)) {
+                            $yearUsage[$index] = '[' . $index . ', ' . ($value - $measurements[$index - 1]) . ']';
+                            $yearUsages[$index] = ($value - $measurements[$index - 1]);
+                        } else {
+                            $yearUsages[$index] = '-';
+                            //$yearUsage[$index] = '[' . $index . ', ' . $value . ']';
+                        }
+                    }
+                    foreach ($measurements as $index => $value) {
+                        echo '<tr>';
+                        //echo '<td>' . $object->getObject()->getId() . ' - ' . $object->getId() . '</td>';
+                        echo '<td>' . $measureDates[$index] . '</td>';
+                        echo '<td>' . $value . '</td>';
+                        echo '<td>' . $yearUsages[$index] . ' kWh</td>';
+                        echo '<td><a class="btn btn-xs btn-info disabled" id="editMeasurement" title="wijzig meting" href="/power/edit/' . $ownership->getId() . '/' . $object->getId() . '" title="Toevoegen nieuwe meting">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a></td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </table>
+            </div>
+            <div class="col-xs-6">
+
+                <script src="http://code.highcharts.com/highcharts.js"></script>
+                <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+                <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+if (count($values)):
+?>
+<script>
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: '<?php echo $object->getObject()->getName() ?>'
+        },
+        xAxis: {
+            tickInterval: 1
+        },
+//        yAxis: {
+//            min: 0,
+//            title: {
+//                text: 'kWh stand'
+//            }
+//        },
+        yAxis: [{ // Primary yAxis
+                labels: {
+                    format: '{value} kWh',
+                    style: {
+                        color: '#89A54E'
+                    }
+                },
+                title: {
+                    text: 'Meterstand',
+                    style: {
+                        color: '#89A54E'
+                    }
+                }
+            }, { // Secondary yAxis
+                title: {
+                    text: 'Verbruik',
+                    style: {
+                        color: '#4572A7'
+                    }
+                },
+                labels: {
+                    format: '{value} kWh',
+                    style: {
+                        color: '#4572A7'
+                    }
+                },
+                opposite: true
+            }],
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y} kWh</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [
+        {
+            type: 'column',
+            yAxis: 1,
+            color: '#4572A7',
+            name: 'Jaarverbruik',
+            data: [<?php echo implode(',', $yearUsage); ?>]
+        },
+        {
+            type: 'line',
+            yAxis: 0,
+            color: '#89A54E',
+            name: 'Meterstand',
+            data: [<?php echo implode(',', $values); ?>],
+        }
+        ]
+    });
+});
+</script>
+<?php
+endif;

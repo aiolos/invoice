@@ -8,18 +8,103 @@ $this->headTitle($title);
 $form = $this->form;
 $form->setAttribute('action', $this->url('owner', array('action' => 'add')));
 $form->prepare();
+$formLabel = $this->plugin('formLabel');
 
 echo $this->form()->openTag($form);
-//echo $this->formHidden($form->get('id'));
-//echo $this->formRow($form->get('name'));
-//echo $this->formRow($form->get('gender'));
-//echo $this->formRow($form->get('street'));
-//echo $this->formRow($form->get('housenumber'));
-//echo $this->formRow($form->get('postalcode'));
-//echo $this->formRow($form->get('city'));
-//echo $this->formRow($form->get('country'));
-//
-//echo $this->formSubmit($form->get('submit'));
-echo $this->formCollection($form);
-
-echo $this->form()->closeTag();
+?>
+<div class=row">
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('initials')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('initials'), $form->getInputFilter()->get('initials')); ?>
+                <?php echo $this->formElementErrors($form->get('initials')); ?>
+            </div>
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('street')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('street'), $form->getInputFilter()->get('street')); ?>
+                <?php echo $this->formElementErrors($form->get('street')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('name')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('name'), $form->getInputFilter()->get('name')); ?>
+                <?php echo $this->formElementErrors($form->get('name')); ?>
+            </div>
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('housenumber')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('housenumber'), $form->getInputFilter()->get('housenumber')); ?>
+                <?php echo $this->formElementErrors($form->get('housenumber')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('gender')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('gender'), $form->getInputFilter()->get('gender')); ?>
+                <?php echo $this->formElementErrors($form->get('gender')); ?>
+            </div>
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('postalcode')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('postalcode'), $form->getInputFilter()->get('postalcode')); ?>
+                <?php echo $this->formElementErrors($form->get('postalcode')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('shipname')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('shipname'), $form->getInputFilter()->get('shipname')); ?>
+                <?php echo $this->formElementErrors($form->get('shipname')); ?>
+            </div>
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('city')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('city'), $form->getInputFilter()->get('city')); ?>
+                <?php echo $this->formElementErrors($form->get('city')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('telephone')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('telephone'), $form->getInputFilter()->get('telephone')); ?>
+                <?php echo $this->formElementErrors($form->get('telephone')); ?>
+            </div>
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('country')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('country'), $form->getInputFilter()->get('country')); ?>
+                <?php echo $this->formElementErrors($form->get('country')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('email')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('email'), $form->getInputFilter()->get('email')); ?>
+                <?php echo $this->formElementErrors($form->get('email')); ?>
+            </div>
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('language')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('language'), $form->getInputFilter()->get('language')); ?>
+                <?php echo $this->formElementErrors($form->get('language')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('debinr')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('debinr'), $form->getInputFilter()->get('debinr')); ?>
+                <?php echo $this->formElementErrors($form->get('debinr')); ?>
+            </div>
+        </div>
+        <?php
+        if (!$this->is_xmlhttprequest):
+        ?>
+        <div class="pull-left">
+            <button class='btn btn-success'><span class='glyphicon glyphicon-ok'></span> Opslaan</button>
+            <a href="/owner" class='btn btn-inverse' onClick='document.location.href = "/owner; return false;"'><span class='glyphicon glyphicon-remove'></span> Annuleer</a>
+        </div>
+        <?php
+        endif;
+        ?>
+        <div class="clearfix"></div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>
+<?php

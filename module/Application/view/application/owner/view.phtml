@@ -1,0 +1,204 @@
+<?php
+$title = 'Bekijk';
+$this->headTitle($title);
+?>
+<a class="btn btn-default" href="/owner">
+    <span class="glyphicon glyphicon-arrow-left"></span>
+    Terug naar lijst
+</a>
+<h1><span class="glyphicon glyphicon-user"></span> <?php echo $this->escapeHtml($title) . ' ' . $owner->getInitials() . ' ' . $owner->getName(); ?></h1>
+<div class="alert alert-success alert-dismissable" id="messageBlock" style="display:none;">
+    <span id="message"></span>
+    <button type="button" class="close" id="closeMessage">&times;</button>
+</div>
+<table class="table">
+    <tr>
+        <th colspan="2">
+            <span class="glyphicon glyphicon-large glyphicon-home"></span> Naam en adres
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <?php echo $this->escapeHtml($owner->getInitials()) . ' ' . $this->escapeHtml($owner->getName()); ?><br>
+            <?php echo $this->escapeHtml($owner->getStreet() . ' ' . $owner->getHousenumber()); ?><br>
+            <?php echo $this->escapeHtml($owner->getPostalcode()) . ' ' . $this->escapeHtml($owner->getCity()); ?><br>
+            <?php echo $this->escapeHtml($owner->getCountry()); ?><br>
+            <a id="editOwner" class="btn btn-xs btn-info" title="wijzig eigenaar" href="/owner/edit/<?php echo$owner->getId(); ?>">
+                <span class="glyphicon glyphicon-pencil"></span> Wijzig
+            </a>
+        </td>
+        <td>
+            <a href='mailto:<?php echo $this->escapeHtml($owner->getEmail()); ?>'>
+                <i class='glyphicon glyphicon-envelope'></i> <?php echo $this->escapeHtml($owner->getEmail()); ?></a><br>
+                <?php echo $this->escapeHtml($owner->getTelephone()); ?><br>
+                Scheepsnaam: <?php echo $this->escapeHtml($owner->getShipname()); ?><br>
+                Taal: <?php echo $this->escapeHtml($owner->getLanguage()); ?><br>
+        </td>
+    </tr>
+</table>
+<br>
+<table class="table">
+    <tr><th colspan="5"><span class="glyphicon glyphicon-list-alt"></span> Facturen</th></tr>
+    <tr><th>Jaar</th><th>Datum</th><th>Update</th><th>Bestandsnaam</th><th>Acties</th></tr>
+    <?php
+    $invoices = $owner->getInvoices();
+    if (!count($invoices)) {
+        echo '<tr><td colspan="5">Geen facturen gevonden</td></tr>';
+    }
+    foreach ($invoices as $invoice) {
+        echo '<tr>';
+        echo '<td>' . $invoice->getYear() . '</td>';
+        echo '<td>' . $invoice->getCreatedAt()->format('d-m-Y') . '</td>';
+        echo '<td>' . (is_object($invoice->getUpdatedAt()) ? $invoice->getUpdatedAt()->format('d-m-Y') : '') . '</td>';
+        echo '<td>' . $invoice->getFilename() . '</td>';
+        echo '<td>';
+            echo '<a class="btn btn-xs btn-primary" href="' . $this->url('invoice',
+                array('action'=>'view', 'id' => $invoice->getId())) . '"><span class="glyphicon glyphicon-eye-open"></span> Bekijk</a>';
+            echo ' <a class="btn btn-xs btn-default" href="' . $this->url('invoice',
+                array('action'=>'download', 'id' => $invoice->getId())) . '"><span class="glyphicon glyphicon-download"></span> Download</a>';
+            echo " <a class='btn btn-xs btn-danger deleteBtn' "
+                . "data-delete-arguments='{\"id\":\"" . $invoice->getId() . "\", \"del\":\"Yes\"}' "
+                . "data-delete-action=\"" . $this->url('invoice',
+                array('action'=>'deletefile', 'id' => $invoice->getId())) . "\" "
+                . "data-delete-message=\"Weet u zeker dat u de pdf '" . $invoice->getFilename() . "' wilt verwijderen\" "
+                . "href=\"#\" "
+                . "rel=\"tooltip\" "
+                . "title=\"Verwijder\"><span class='glyphicon glyphicon-trash'></span> Verwijder pdf</a>";
+        echo '</td>';
+        echo '</tr>';
+    }
+    ?>
+    <tr><td colspan="5">
+        <a id="newInvoice" title="Nieuwe factuur" class="btn btn-xs btn-success" href="/invoice/add/<?php echo $owner->getId(); ?>">
+            <span class="glyphicon glyphicon-plus"></span> Maak nieuwe factuur
+        </a>
+    </td></tr>
+</table>
+<table class="table">
+    <tr><th colspan="6">
+            <span class="glyphicon glyphicon-large glyphicon-tags"></span> Objecten
+        </th></tr>
+    <tr><th>Type</th><th>Naam</th><th>Van</th><th>Tot</th><th>Acties</th></tr>
+    <?php
+    $objectOwnerships = $owner->getObjectownerships();
+    foreach ($objectOwnerships as $objectownership) {
+        echo '<tr>';
+        switch ($objectownership->getObject()->getId()) {
+            case 2:
+                echo '<td>';
+                echo '<a href="' . $this->url('power',
+                array('action'=>'view', 'id' => $objectownership->getId())) . '">' . $objectownership->getId() . ' - ' . $objectownership->getObject()->getName() . '</a></td>';
+                break;
+
+            case 3:
+                echo '<td>';
+                echo '<a href="' . $this->url('surface',
+                array('action'=>'view', 'id' => $objectownership->getObject()->getId())) . '">' . $objectownership->getId() . ' - ' . $objectownership->getObject()->getName() . '</a></td>';
+                break;
+
+            default:
+                echo '<td>' . $objectownership->getId() . ' - ' . $objectownership->getObject()->getName() . '</td>';
+        }
+        echo '<td>' . $objectownership->getName() . '</td>';
+        echo '<td>' . $objectownership->getFromDate()->format('d-m-Y') . '</td>';
+        echo '<td>' . $objectownership->getToDate()->format('d-m-Y') . '</td>';
+        if ($objectownership->getObject()->getId() == 2) {
+            echo '<td>';
+            echo '<a class="btn btn-xs btn-primary" href="' . $this->url('power',
+                array('action'=>'view', 'id' => $objectownership->getId())) . '"><span class="glyphicon glyphicon-eye-open"></span> Bekijk</a>';
+            echo ' <a class="btn btn-xs btn-info" href="' . $this->url('objectownership',
+                array('action'=>'edit', 'id' => $objectownership->getId())) . '"><span class="glyphicon glyphicon-edit"></span> Wijzig</a>';
+            echo '</td>';
+        } else {
+            echo '<td>';
+            echo '<a class="btn btn-xs btn-primary disabled" href="' . $this->url('objectownership',
+                array('action'=>'view', 'id' => $objectownership->getId())) . '"><span class="glyphicon glyphicon-eye-open"></span> Bekijk</a>';
+            echo ' <a class="btn btn-xs btn-info" href="' . $this->url('objectownership',
+                array('action'=>'edit', 'id' => $objectownership->getId())) . '"><span class="glyphicon glyphicon-edit"></span> Wijzig</a>';
+            echo '</td>';
+        }
+
+        echo '</tr>';
+    }
+    ?>
+    <tr><td colspan="5">
+        <a id="newOwner" title="Nieuw object" class="btn btn-xs btn-success" href="/objectownership/add/<?php echo $owner->getId(); ?>" onclick="return openDialog($(this));">
+            <span class="glyphicon glyphicon-plus"></span> Toevoegen nieuw object
+        </a>
+    </td></tr>
+</table>
+<script>
+$(document).ready(function() {
+    $(document).on('click', '#closeMessage', function(event) {
+        $('#messageBlock').hide();
+    });
+
+    $(document).on('click', '.sendBtn', function(event) {
+        $this = $(this);
+        $('#messageBlock').hide();
+
+        var modelArguments = $this.data("deleteArguments");
+        var deleteMessage = $this.data("deleteMessage");
+        var action = $this.data("deleteAction");
+
+        bootbox.confirm(deleteMessage, function (result) {
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: action,
+                    data: modelArguments,
+                }).done(function(data) {
+                        console.log(data);
+
+                        if (data == 'ok') {
+                            $('#messageBlock').removeClass('alert-danger');
+                            $('#messageBlock').addClass('alert-success');
+                            $('#message').text('E-mail is verstuurd');
+                            $('#messageBlock').show();
+                        } else {
+                            $('#messageBlock').removeClass('alert-success');
+                            $('#messageBlock').addClass('alert-danger');
+                            $('#message').text('Er is iets mis gegeaan, de e-mail is NIET verstuurd');
+                            $('#messageBlock').show();
+                        }
+                        //window.location.href = "<?php echo $this->url('owner', array('action' => 'view', 'id' => $owner->getId())); ?>";
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.deleteBtn', function(event) {
+        $this = $(this);
+        $('#messageBlock').hide();
+
+        var modelArguments = $this.data("deleteArguments");
+        var deleteMessage = $this.data("deleteMessage");
+        var action = $this.data("deleteAction");
+
+        bootbox.confirm(deleteMessage, function (result) {
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: action,
+                    data: modelArguments,
+                }).done(function(data) {
+                        console.log(data);
+
+                        if (data == 'ok') {
+                            $('#messageBlock').removeClass('alert-danger');
+                            $('#messageBlock').addClass('alert-success');
+                            $('#message').text('Bestand is verwijderd');
+                            $('#messageBlock').show();
+                        } else {
+                            $('#messageBlock').removeClass('alert-success');
+                            $('#messageBlock').addClass('alert-danger');
+                            $('#message').text('Er is iets mis gegeaan, het bestand kon niet worden verwijderd');
+                            $('#messageBlock').show();
+                        }
+                        //window.location.href = "<?php echo $this->url('owner', array('action' => 'view', 'id' => $owner->getId())); ?>";
+                });
+            }
+        });
+    });
+});
+</script>

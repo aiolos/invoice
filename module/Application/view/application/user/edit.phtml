@@ -1,0 +1,42 @@
+<?php
+    $form->get('submit')->setValue('gebruiker bewerken');
+?>
+<div class=row">
+    <div class="well well-sm">
+        <h2><?php echo $this->Translate('Gebruiker bewerken'); ?></h2>
+        <?php echo $this->form()->openTag($form); ?>
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('username')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('username')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('username'), $form->getInputFilter()->get('username')); ?>
+                <?php echo $this->formElementErrors($form->get('username')); ?>
+            </div>
+        </div>
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('email')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('email')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('email'), $form->getInputFilter()->get('email')); ?>
+                <?php echo $this->formElementErrors($form->get('email')); ?>
+            </div>
+        </div>
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('displayName')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('displayName')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('displayName'), $form->getInputFilter()->get('displayName')); ?>
+                <?php echo $this->formElementErrors($form->get('displayName')); ?>
+            </div>
+        </div>
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('password')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('password')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('password'), $form->getInputFilter()->get('password')); ?>
+                <?php echo $this->formElementErrors($form->get('password')); ?>
+            </div>
+        </div>
+        <div class="pull-right">
+            <?php echo $this->FormElementWw($form->get('submit')); ?>
+        </div>
+        <div class="clearfix"></div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>

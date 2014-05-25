@@ -1,0 +1,56 @@
+<?php
+$title = 'Facturen';
+$this->headTitle($title);
+?>
+<script>
+$(document).ready(function() {
+    jQuery.fn.dataTableExt.oPagination.iFullNumbersShowPages = 6;
+
+    $('#ownerTable').dataTable({
+        "sDom": '<"H">rt<"F"ip><"clear">',
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "/invoice/list",
+        "sAjaxDataProp": "invoices",
+        "aoColumns": [
+            { "sTitle": 'ID',
+              "sWidth": '100px',
+              "mData": function (data) {
+                return data.id;
+              }
+            },
+            { "sTitle": "Jaar",
+              "sWidth": '150px',
+              "mData": function (data) {
+                return data.year;
+              } },
+            { "sTitle": "Bestandsnaam",
+              "sWidth": '400px',
+              "mData": function(data) {
+                return data.filename;
+            } },
+            { "sTitle": "Aangemaakt",
+              "mData": function(data) {
+                return data.createdAt.date;
+            } },
+            { "sTitle": "Acties",
+              "sWidth": '250px',
+              "bSortable": false,
+              "mData": function ( data) {
+                var actions =
+                "<a href='/invoice/view/" + data.id + "' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-eye-open'></span> Bekijk</a>";
+
+                return actions;
+              }
+            }
+        ]
+    });
+
+} );
+</script>
+<h1><i class='glyphicon glyphicon-large glyphicon-list'></i> <?php echo $this->escapeHtml($title); ?></h1>
+
+<table class="table dataTable" id="ownerTable">
+</table>
+<?

@@ -1,0 +1,53 @@
+<?php
+
+$title = 'Toevoegen Prijs';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('price', array('action' => 'add', 'objecttype' => $objecttype)));
+$form->prepare();
+
+$formLabel = $this->plugin('formLabel');
+
+echo $this->form()->openTag($form);
+?>
+<div class=row">
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('year')); ?></div>
+            <div class="col-xs-2">
+                <?php echo $this->FormElementWw($form->get('year'), $form->getInputFilter()->get('year')); ?>
+                <?php echo $this->formElementErrors($form->get('year')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('price')); ?></div>
+            <div class="col-xs-2">
+                <?php echo $this->FormElementWw($form->get('price'), $form->getInputFilter()->get('price')); ?>
+                <?php echo $this->formElementErrors($form->get('price')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('unit')); ?></div>
+            <div class="col-xs-2">
+                <?php echo $this->FormElementWw($form->get('unit'), $form->getInputFilter()->get('unit')); ?>
+                <?php echo $this->formElementErrors($form->get('unit')); ?>
+            </div>
+        </div>
+        <?php
+        if (!$this->is_xmlhttprequest):
+        ?>
+        <div class="pull-left">
+            <button class='btn btn-success'><span class='glyphicon glyphicon-ok'></span> Opslaan</button>
+            <a href="/objecttype/view/<?php echo $this->objecttype; ?>" class='btn btn-inverse' onClick='document.location.href = "/objecttype/view/<?php echo $this->objecttype; ?>; return false;"'><span class='glyphicon glyphicon-remove'></span> Annuleer</a>
+        </div>
+        <?php
+        endif;
+        ?>
+        <div class="clearfix"></div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>
+<?php

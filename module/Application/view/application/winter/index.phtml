@@ -1,0 +1,43 @@
+<?php
+
+$title = 'Winterstallers';
+$this->headTitle($title);
+?>
+<h1><i class='glyphicon glyphicon-large glyphicon-snowflake'></i> <?php echo $this->escapeHtml($title); ?></h1>
+<p>
+    <a class="btn btn-large" href="<?php echo $this->url('owner', array('controller'=>'owner','action'=>'add'));?>">
+        <button class="btn btn-xs btn-success" type="button"><span class="glyphicon glyphicon-plus"></span> Toevoegen nieuwe winterstaller</button>
+    </a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Naam</th>
+    <th>Adres</th>
+    <th>Postcode</th>
+    <th>Plaats</th>
+    <th>Land / Taal</th>
+    <th>Email</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($ownerships as $ownership) : ?>
+<tr>
+    <td><a href="<?php echo $this->url('owner',
+            array('action'=>'view', 'id' => $ownership->getOwner()->getId()));?>"><?php echo $this->escapeHtml($ownership->getOwner()->getInitials() . ' ' . $ownership->getOwner()->getName());?></a></td>
+    <td><?php echo $this->escapeHtml($ownership->getOwner()->getStreet() . ' ' . $ownership->getOwner()->getHousenumber());?></td>
+    <td><?php echo $this->escapeHtml($ownership->getOwner()->getPostalcode());?></td>
+    <td><?php echo $this->escapeHtml($ownership->getOwner()->getCity());?></td>
+    <td><?php echo $this->escapeHtml($ownership->getOwner()->getCountry() . '/' . $ownership->getOwner()->getLanguage());?></td>
+    <td><?php echo $this->escapeHtml($ownership->getOwner()->getEmail());?></td>
+    <td>
+        <a href="<?php echo $this->url('owner',
+            array('action'=>'edit', 'id' => $ownership->getOwner()->getId()));?>"><i class="glyphicon glyphicon-large glyphicon-edit"></i></a>
+        <a href="<?php echo $this->url('owner',
+            array('action'=>'view', 'id' => $ownership->getOwner()->getId()));?>"><i class="glyphicon glyphicon-large glyphicon-user"></i></a>
+        <a href="mailto:<?php echo $ownership->getOwner()->getEmail();?>"><i class="glyphicon glyphicon-large glyphicon-envelope"></i></a>
+        <a href="<?php echo $this->url('owner',
+            array('action'=>'delete', 'id' => $ownership->getOwner()->getId()));?>"><i class="glyphicon glyphicon-large glyphicon-remove"></i></a>
+    </td>
+</tr>
+<?php endforeach; ?>
+</table>

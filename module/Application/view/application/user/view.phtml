@@ -1,0 +1,28 @@
+<?php
+    $this->headTitle($this->translate('Systeemgebruiker'));
+?>
+<div class=row">
+    <h1><span class="glyphicon glyphicon-user"></span> <?php echo $this->translate('Gebruiker'); ?></h1>
+    <table class="table">
+        <tr>
+            <th><?php echo $this->translate('Gebruikersnaam'); ?></th>
+            <td><?php echo $this->escapeHtml($user->getUsername());?></td>
+        </tr>
+        <tr>
+            <th><?php echo $this->translate('E-mail'); ?></th>
+            <td><?php echo $this->escapeHtml($user->getEmail());?></td>
+        </tr>
+        <tr>
+            <th><?php echo $this->translate('Naam'); ?></th>
+            <td><?php echo $this->escapeHtml($user->getDisplayName());?></td>
+        </tr>
+        <tr>
+            <th><?php echo $this->translate('Aangemaakt'); ?></th>
+            <td><?php echo $this->escapeHtml($user->getCreatedAt() instanceof \DateTime ? $user->getCreatedAt()->format('Y-m-d H:i:s') : '-');?></td>
+        </tr>
+        <tr>
+            <th><?php echo $this->translate('Bijgewerkt'); ?></th>
+            <td><?php echo $this->escapeHtml($user->getUpdatedAt() instanceof \DateTime ? $user->getUpdatedAt()->format('Y-m-d H:i:s') : '-');?></td>
+        </tr>
+    </table>
+</div>

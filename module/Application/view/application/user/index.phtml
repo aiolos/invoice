@@ -1,0 +1,69 @@
+<?php
+    $this->headTitle('Gebruikers');
+?>
+<div class=row">
+    <h1><span class="glyphicon glyphicon-user"></span> <?php echo $this->escapeHtml('Gebruikers'); ?></h1>
+    <table class="table">
+    <tr>
+        <th><?php echo $this->translate('Name'); ?></th>
+        <th><?php echo $this->translate('Gebruikersnaam'); ?></th>
+        <th><?php echo $this->translate('E-mail'); ?></th>
+        <th><?php echo $this->translate('Aangemaakt'); ?></th>
+        <th><?php echo $this->translate('Bijgewerkt'); ?></th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php foreach($users as $user) : ?>
+    <tr>
+        <td><?php echo $this->escapeHtml($user->getDisplayName());?></td>
+        <td><?php echo $this->escapeHtml($user->getUsername());?></td>
+        <td><?php echo $this->escapeHtml($user->getEmail());?></td>
+        <td><?php echo $this->escapeHtml($user->getCreatedAt() instanceof \DateTime ? $user->getCreatedAt()->format('d-m-Y H:i:s') : '-');?></td>
+        <td><?php echo $this->escapeHtml($user->getUpdatedAt() instanceof \DateTime ? $user->getUpdatedAt()->format('d-m-Y H:i:s') : '-');?></td>
+        <td>
+            <a class="btn btn-xs btn-info" href="<?php echo $this->url('user', array('action'=>'view', 'id' => $user->getId())); ?>">
+                <span class="glyphicon glyphicon-info-sign"></span>&nbsp;<?php echo $this->translate('Info'); ?>
+            </a>
+            <a class="btn btn-xs btn-primary" href="<?php echo $this->url('user', array('action'=>'edit', 'id' => $user->getId())); ?>">
+                <span class="glyphicon glyphicon-edit"></span>&nbsp;<?php echo $this->translate('Bewerken'); ?>
+            </a>
+            <a class="btn btn-xs btn-danger deleteBtn"
+                data-delete-arguments='{"id":"<?php echo $user->getId(); ?>"}'
+                data-delete-action="<?php echo $this->url('user', array('action'=>'remove')); ?>"
+                data-delete-message="Weet u zeker dat u '<?php echo $user->getDisplayName(); ?>' wilt verwijderen?"
+                href="#"
+                rel="tooltip"
+                title="Verwijderen">
+                <span class="glyphicon glyphicon-remove"></span>&nbsp;<?php echo $this->translate('Verwijderen'); ?>
+            </a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    </table>
+    <a class="btn btn-xs btn-success" href="<?php echo $this->url('user', array('action'=>'add')); ?>">
+        <span class="glyphicon glyphicon-plus"></span> Gebruiker aanmaken
+    </a>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.deleteBtn').click(function(event) {
+            $this = $(this);
+
+            var modelArguments = $this.data("deleteArguments");
+            var deleteMessage = $this.data("deleteMessage");
+            var action = $this.data("deleteAction");
+
+            bootbox.confirm(deleteMessage, function (result) {
+                if (result) {
+                    $.ajax({
+                        type: "POST",
+                        url: action,
+                        data: modelArguments,
+                        success: function (html) {
+                            window.location.href = "<?php echo $this->url('user'); ?>";
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>

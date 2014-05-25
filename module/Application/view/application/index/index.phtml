@@ -1,24 +1,24 @@
 <div class="hero-unit">
-    <h1><?php echo sprintf($this->translate('Wellewille %sFactureren%s'), '<span class="zf-green">', '</span>') ?></h1>
+    <h1><?php echo sprintf($this->translate('%sNotaTool%s'), '<span class="zf-green">', '</span>') ?></h1>
 </div>
 
 <div class="row">
 
-    <div class="span4">
+    <div class="col-xs-4 col-md4">
         <h2><?php echo $this->translate('Eigenaren') ?></h2>
         <p><?php echo sprintf($this->translate('Bekijk, wijzig en voeg eigenaren toe. ')) ?></p>
-        <p><a class="btn btn-success" href="./owner"><?php echo $this->translate('Eigenaren') ?> &raquo;</a></p>
+        <p><a class="btn btn-success" href="./owner"><span class="glyphicon glyphicon-user"></span> <?php echo $this->translate('Eigenaren') ?> &raquo;</a></p>
     </div>
 
-    <div class="span4">
+    <div class="col-xs-4 col-md4">
         <h2><?php echo $this->translate('Winterstallers') ?></h2>
         <p><?php echo sprintf($this->translate('Bekijk, wijzig en voeg winterstallers toe. ')) ?></p>
-        <p><a class="btn btn-success" href="./winter"><?php echo $this->translate('Winterstallers') ?> &raquo;</a></p>
+        <p><a class="btn btn-success" href="./winter"><span class="glyphicon glyphicon-asterisk"></span> <?php echo $this->translate('Winterstallers') ?> &raquo;</a></p>
    </div>
 
-   <div class="span4">
+   <div class="col-xs-4 col-md4">
        <h2><?php echo $this->translate('Statistieken') ?></h2>
         <p><?php echo sprintf($this->translate('Bekijk statistieken. ')) ?></p>
-       <p><a class="btn btn-success" href="./stats"><?php echo $this->translate('Statistieken') ?> &raquo;</a></p>
+       <p><a class="btn btn-success" href="./stats"><span class="glyphicon glyphicon-tasks"></span> <?php echo $this->translate('Statistieken') ?> &raquo;</a></p>
    </div>
 </div>

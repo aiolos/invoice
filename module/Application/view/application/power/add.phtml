@@ -1,0 +1,44 @@
+<?php
+
+$title = 'Toevoegen Meterstand';
+$this->headTitle($title);
+?>
+<h1><span class='glyphicon glyphicon-stats'></span> <?php echo $this->escapeHtml($title); ?></h1>
+<h4><?php echo $this->escapeHtml($ownership->getName() . ' - ' . $ownership->getOwner()->getInitials() . ' ' . $ownership->getOwner()->getName()); ?></h4>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('power', array('action' => 'add', 'id' => $this->id)));
+
+echo $this->form()->openTag($form);
+?>
+<div class=row">
+    <div class="well well-sm">
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('date')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('date')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('date'), $form->getInputFilter()->get('date')); ?>
+                <?php echo $this->formElementErrors($form->get('date')); ?>
+            </div>
+        </div>
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('value')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('value')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('value'), $form->getInputFilter()->get('value')); ?>
+                <?php echo $this->formElementErrors($form->get('value')); ?>
+            </div>
+        </div>
+        <?php
+        if (!$this->is_xmlhttprequest):
+        ?>
+        <div class="pull-left">
+            <button class='btn btn-success'><span class='glyphicon glyphicon-ok'></span> Opslaan</button>
+            <a href="/power/view/<?php echo $this->id; ?>" class='btn btn-inverse' onClick='document.location.href = "/power/view/<?php echo $this->id; ?>; return false;"'><span class='glyphicon glyphicon-remove'></span> Annuleer</a>
+        </div>
+        <?php
+        endif;
+        ?>
+        <div class="clearfix"></div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>
+<?php

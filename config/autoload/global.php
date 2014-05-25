@@ -14,7 +14,6 @@
 return array(
     'db' => array(
         'driver'         => 'Pdo',
-        //'dsn'            => 'mysql:dbname=joules;host=localhost',
         'driver_options' => array(
             PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
         ),
@@ -23,6 +22,26 @@ return array(
         'factories' => array(
             'Zend\Db\Adapter\Adapter'
                 => 'Zend\Db\Adapter\AdapterServiceFactory',
+        ),
+    ),
+    'zfcuser' => array(
+        'enable_default_entities' => false,
+    ),
+    'zenddevelopertools' => array(
+        'profiler' => array(
+            'enabled' => false,
+            'strict' => false,
+            'flush_early' => false,
+            'cache_dir' => 'data/cache',
+            'matcher' => array(),
+            'collectors' => array(),
+        ),
+        'toolbar' => array(
+            'enabled' => true,
+            'auto_hide' => false,
+            'position' => 'bottom',
+            'version_check' => true,
+            'entries' => array(),
         ),
     ),
 );

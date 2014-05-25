@@ -1,0 +1,59 @@
+<?php
+
+$title = 'Wijzigen Object';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('objectownership', array('action' => 'edit', 'id' => $this->id)));
+$form->prepare();
+$formLabel = $this->plugin('formLabel');
+
+echo $this->form()->openTag($form);
+?>
+<div class=row">
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('name')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('name'), $form->getInputFilter()->get('name')); ?>
+                <?php echo $this->formElementErrors($form->get('name')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('fromDate')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('fromDate'), $form->getInputFilter()->get('fromDate')); ?>
+                <?php echo $this->formElementErrors($form->get('fromDate')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('toDate')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('toDate'), $form->getInputFilter()->get('toDate')); ?>
+                <?php echo $this->formElementErrors($form->get('toDate')); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('type')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElement($form->get('type'), $form->getInputFilter()->get('type')); ?>
+                <?php echo $this->formElementErrors($form->get('type')); ?>
+            </div>
+        </div>
+        <?php
+        if (!$this->is_xmlhttprequest):
+        ?>
+        <div class="pull-left">
+            <button class='btn btn-success'><span class='glyphicon glyphicon-ok'></span> Opslaan</button>
+            <a href="/owner/view/<?php echo $ownerId; ?>" class='btn btn-inverse' onClick='document.location.href = "/owner/view/<?php echo $ownerId; ?>; return false;"'><span class='glyphicon glyphicon-remove'></span> Annuleer</a>
+        </div>
+        <?php
+        endif;
+        ?>
+        <div class="clearfix"></div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>
+<?php

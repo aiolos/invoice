@@ -1,0 +1,20 @@
+<?php
+$title = 'Bekijk Oppervlak';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<br>
+<table class="table">
+    <tr><th colspan="4"><i class="icon-large icon-vector-path-all"></i> Oppervlakte</th></tr>
+    <tr><th>ObjectId</th><th>Jaar</th><th>Lengte</th><th>Breedte</th>
+    <?php
+    foreach ($surfaceobjects as $object) {
+        echo '<tr>';
+        echo '<td>' . $object->getId() . '</td>';
+        echo '<td>' . $object->getYear() . '</td>';
+        echo '<td>' . $object->getLength() . '</td>';
+        echo '<td>' . $object->getWidth() . '</td>';
+        echo '</tr>';
+    }
+    ?>
+</table>

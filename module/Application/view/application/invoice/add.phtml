@@ -1,0 +1,42 @@
+<?php
+
+$title = 'Toevoegen Factuur';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+$form->setAttribute('action', $this->url('invoice', array('action' => 'add', 'id' => $owner->getId())));
+
+echo $this->form()->openTag($form);
+?>
+<div class=row">
+    <div class="well well-sm">
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('year')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('year')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('year'), $form->getInputFilter()->get('year')); ?>
+                <?php echo $this->formElementErrors($form->get('year')); ?>
+            </div>
+        </div>
+        <div class="row <?php echo $this->FormElementValid($form, $form->getInputFilter()->get('filename')); ?>">
+            <div class="col-xs-2"><?php echo $this->formLabel($form->get('filename')); ?></div>
+            <div class="col-xs-4">
+                <?php echo $this->FormElementWw($form->get('filename'), $form->getInputFilter()->get('filename')); ?>
+                <?php echo $this->formElementErrors($form->get('filename')); ?>
+            </div>
+        </div>
+        <?php
+        if (!$this->is_xmlhttprequest):
+        ?>
+        <div class="pull-left">
+            <button class='btn btn-success'><span class='glyphicon glyphicon-ok'></span> Aanmaken</button>
+            <a href="/owner/view/<?php echo $owner->getId(); ?>" class='btn btn-inverse' onClick='document.location.href = "/owner/view/<?php echo $owner->getId(); ?>; return false;"'><span class='glyphicon glyphicon-remove'></span> Annuleer</a>
+        </div>
+        <?php
+        endif;
+        ?>
+        <div class="clearfix"></div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </div>
+</div>
+<?php

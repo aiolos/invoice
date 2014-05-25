@@ -3,7 +3,7 @@ Invoice
 
 Introduction
 ------------
-This application creates invoices based on the information stored in the database tables
+This application creates invoices based on the objects of the owner
 
 The application is using Zend Framework 2.
 
@@ -20,16 +20,16 @@ Clone the repository and manually invoke `composer` using the shipped
     cd invoice
     php composer.phar self-update
     php composer.phar install
+    (run doctrine-module to create database tables)
 
 (The `self-update` directive is to ensure you have an up-to-date `composer.phar`
 available.)
 
 Todo:
 -----
-- Addition of box ownership to owners
-- Add 'winterstallers'
+- Add new owners and 'winterstallers'
 - Addition of ship size to winterstallers
-- Add parameters per year
-- Create invoices from the data
 - Create statistics
-- Do something with authentication
+- Roles in authentication
+- Access for owners to see own powerusage
+- More dynamic invoices

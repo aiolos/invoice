@@ -1,36 +1,130 @@
 <?php
-// module/Album/view/album/album/index.phtml:
-
 $title = 'Eigenaren';
 $this->headTitle($title);
 ?>
-<h1><?php echo $this->escapeHtml($title); ?></h1>
-<p>
-    <a href="<?php echo $this->url('owner', array('controller'=>'owner','action'=>'add'));?>"><i class="icon-plus"></i>Nieuwe eigenaar</a>
-</p>
+<script>
+    function openDialog(element){
+        var $dialogLoad = $('div#dialog').dialog({
+            title: element.attr('title'),
+            modal: true,
+            position: { my: "left top", at: "left bottom", of: element },
+            buttons: [
+            {
+                text: "<span class='glyphicon glyphicon-remove'></span> Sluit"
+              , classed: "btn-danger"
+              , click: function() {
+                  $(this).dialog("close");
+                }
+            },
+            {
+                text: "<span class='glyphicon glyphicon-ok'></span> Opslaan"
+              , classed: "btn-success"
+              , click: function() {
+                  $('form#owner').on(
+                        'submit',
+                        function(event) {
+                            $.post(
+                                $('form#owner').attr('action'),
+                                $('form#owner').serialize(),
+                                function (data) {
+                                    var dialog = $('form#owner').parents('div#dialog');
+                                    if (typeof data === 'object' && data.redirect) {
+                                        document.location.href = data.redirect;
+                                    } else if (typeof data === 'object' && data.title !== null && data.text !== null) {
+                                        dialog.RegieDialog('close');
+                                        $(document).trigger('notatool:ajaxFormPostSuccesful');
+                                        feedback(data);
+                                    } else if (typeof data === 'object' && data.message) {
+                                        alert(data.message);
+                                    } else {
+                                        $('div#dialog').html(data);
+                                    }
+                                }
+                            );
+                            return false;
+                        }
+                    );
 
-<table class="table">
-<tr>
-    <th>Naam</th>
-    <th>Adres</th>
-    <th>Postcode</th>
-    <th>Plaats</th>
-    <th>Land</th>
-    <th>&nbsp;</th>
-</tr>
-<?php foreach ($owners as $owner) : ?>
-<tr>
-    <td><?php echo $this->escapeHtml($owner->getName());?></td>
-    <td><?php echo $this->escapeHtml($owner->getStreet() . ' ' . $owner->getHousenumber());?></td>
-    <td><?php echo $this->escapeHtml($owner->getPostalcode());?></td>
-    <td><?php echo $this->escapeHtml($owner->getCity());?></td>
-    <td><?php echo $this->escapeHtml($owner->getCountry());?></td>
-    <td>
-        <a href="<?php echo $this->url('owner',
-            array('action'=>'edit', 'id' => $owner->getId()));?>"><i class="icon-edit"></i></a>
-        <a href="<?php echo $this->url('owner',
-            array('action'=>'delete', 'id' => $owner->getId()));?>"><i class="icon-remove"></i></a>
-    </td>
-</tr>
-<?php endforeach; ?>
+                    $('form#owner').submit();
+                }
+            }
+
+          ]
+        });
+        $('div#dialog').load(element.attr('href'));
+
+        return false;
+    }
+
+$(document).ready(function() {
+    jQuery.fn.dataTableExt.oPagination.iFullNumbersShowPages = 6;
+
+    $('#ownerTable').dataTable({
+        "sDom": '<"H">rt<"F"ip><"clear">',
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "/owner/list",
+        "sAjaxDataProp": "owners",
+        "aoColumns": [
+            { "sTitle": 'Naam',
+              "sWidth": '175px',
+              "mData": function (data) {
+                return " <a href='/owner/view/" + data.id + "'>" + data.initials + " " + data.name + "</a>";
+              }
+            },
+            { "sTitle": "Adres",
+              "sWidth": '380px',
+              "mData": function (data) {
+                return data.street + " " + data.housenumber + ", " + data.postalcode + " " + data.city + " (" + data.country + ")";
+              } },
+            { "sTitle": "Taal",
+              "sWidth": '100px',
+              "mData": function(data) {
+                return data.country + " / " + data.language;
+            } },
+            { "sTitle": "E-mail",
+              "mData": function(data) {
+                var emailAction = "<a href='mailto:" + data.email + "'><span class='glyphicon glyphicon-large glyphicon-envelope'></span> " + data.email + "</a>";
+                if (!data.email.length) {
+                    return '';
+                }
+                return emailAction;
+            } },
+            { "sTitle": "Telefoon", "mData": "telephone", "sWidth": '125px' }
+        ]
+    });
+
+    $(document).on('click', '.deleteBtn', function(event) {
+        $this = $(this);
+
+        var modelArguments = $this.data("deleteArguments");
+        var deleteMessage = $this.data("deleteMessage");
+        var action = $this.data("deleteAction");
+
+        bootbox.confirm(deleteMessage, function (result) {
+            if (result) {
+                $.ajax({
+                    type: "POST",
+                    url: action,
+                    data: modelArguments,
+                    success: function (html) {
+                        window.location.href = "<?php echo $this->url('owner'); ?>";
+                    }
+                });
+            }
+        });
+    });
+} );
+</script>
+<h1><i class='glyphicon glyphicon-large glyphicon-user'></i> <?php echo $this->escapeHtml($title); ?>
+    <div class="pull-right">
+        <a id="newOwner" title="Nieuwe eigenaar" class="btn btn-success disabled" href="owner/add" title='Toevoegen nieuwe eigenaar' onclick="return openDialog($('#newOwner'));">
+            <span class="glyphicon glyphicon-plus"></span> Toevoegen nieuwe eigenaar
+        </a>
+    </div>
+</h1>
+
+<table class="table dataTable" id="ownerTable">
 </table>
+<?

@@ -1,0 +1,24 @@
+<?php
+$title = 'Bekijk Objecttype';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title) . ' - ' . $objecttype->getName(); ?></h1>
+<table class="table">
+<?php
+echo '<tr><th>Naam</th><th></th></tr>';
+echo '<tr><td>';
+echo $this->escapeHtml($objecttype->getName()) . '<br>';
+echo '</td>';
+echo $objecttype->getPrice()->getPrice();
+echo '<td>';
+echo '</td>';
+echo '</tr>';
+?>
+</table>
+<br><br>
+<table class="table">
+    <tr><th>Facturen</th></tr>
+</table>
+<table class="table">
+    <tr><th>Objecten</th></tr>
+</table>
